@@ -102,62 +102,47 @@ final_df.columns = ['fhjl_id', 'fhjl_time', 'sales_name', 'ywlx_code', 'khmc', '
 # 保存到CSV文件
 final_df.to_csv('project-2024-a/data/final_output.csv', index=False)
 #fhjl_id:
-
 # 来源: fahuojilu 表中的 id_fhjl
 # 含义: 发货记录 ID
 # fhjl_time:
-
 # 来源: fahuojilu 表中的 create_time
 # 含义: 发货记录创建时间
 # sales_name:
-
 # 来源: yonghu 表中的 user_name
 # 含义: 创建订单的销售人员姓名
 # ywlx_code:
-
 # 来源: kehuxiadan 表中的 ywlx_code
 # 含义: 业务类型描述
 # khmc:
-
 # 来源: kehu 表中的 khmc
 # 含义: 客户名称
 # fhdmc:
-
 # 来源: fahuodixinxi 表中的 mc
 # 含义: 发货地名称
 # zdmc:
-
 # 来源: zhandianxinxi 表中的 zdmc
 # 含义: 站点名称
 # hplx:
-
 # 来源: zidian 表中的 dict_label（通过 dict_type 为 ERP_HPLX 过滤）
 # 含义: 货品类型描述
 # cpgg:
-
 # 来源: zidian 表中的 dict_label（通过 dict_type 为 ERP_CPGG 过滤）
 # 含义: 产品规格描述
 # cppp:
-
 # 来源: zidian 表中的 dict_label（通过 dict_type 为 ERP_CPPP 过滤）
 # 含义: 产品品牌描述
 # fhdw:
-
 # 来源: fahuojilu 表中的 jz
 # 含义: 发货吨位
 # dzdw:
-
 # 来源: fahuojilu 表中的 dzdw
 # 含义: 到站吨位
 # dj:
-
 # 来源: fahuojilu 表中的 dj
 # 含义: 货物单价
 # hk:
-
 # 来源: fahuojilu 表中的 hk
 # 含义: 货款（单价 x 净重）
 # cph:
-
 # 来源: cheliang 表中的 cph
 # 含义: 车牌号
