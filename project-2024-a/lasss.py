@@ -16,8 +16,49 @@ final_df = pd.read_csv('project-2024-a/data/final_output.csv')
 # 确保日期列为 datetime 类型
 final_df['fhjl_time'] = pd.to_datetime(final_df['fhjl_time'])
 
+# 检查列名
+print("数据框的列名：")
+print(final_df.columns)
+
 # 过滤2023年的数据
 data_2023 = final_df[(final_df['fhjl_time'] >= '2023-01-01') & (final_df['fhjl_time'] < '2024-01-01')]
+
+# 检查 ywlx_code 列的唯一值
+print("ywlx_code 列的唯一值：")
+print(data_2023['ywlx_code'].unique())
+
+# 确保 'ywlx_code' 列存在
+if 'ywlx_code' not in data_2023.columns:
+    print("Error: 'ywlx_code' 列不存在于数据框中。")
+else:
+    # 使用字符串匹配来过滤包含“配送”或“自提”的记录
+    delivery_methods = data_2023[data_2023['ywlx_code'].str.contains('配送|自提', na=False)]
+
+    # 分析自提与配送的变化
+    delivery_stats = delivery_methods.groupby([delivery_methods['fhjl_time'].dt.to_period('M'), 'ywlx_code']).agg({'fhdw': 'sum', 'hk': 'sum'}).reset_index()
+    delivery_stats['fhjl_time'] = delivery_stats['fhjl_time'].dt.to_timestamp()
+
+    print("2023年月度自提与配送销量和销售额：")
+    print(delivery_stats)
+
+    # 绘制自提与配送的变化趋势图
+    plt.figure(figsize=(14, 7))
+    sns.lineplot(data=delivery_stats, x='fhjl_time', y='fhdw', hue='ywlx_code', marker='o')
+    plt.title('2023年月度自提与配送销量（吨）')
+    plt.xlabel('月份')
+    plt.ylabel('销量（吨）')
+    plt.legend(title='配送方式')
+    plt.grid(True)
+    plt.show()
+
+    plt.figure(figsize=(14, 7))
+    sns.lineplot(data=delivery_stats, x='fhjl_time', y='hk', hue='ywlx_code', marker='o')
+    plt.title('2023年月度自提与配送销售额（元）')
+    plt.xlabel('月份')
+    plt.ylabel('销售额（元）')
+    plt.legend(title='配送方式')
+    plt.grid(True)
+    plt.show()
 
 # 总销量（吨）和总销售额（元）
 total_volume = data_2023.groupby('hplx')['fhdw'].sum()
@@ -189,7 +230,7 @@ plt.show()
 plt.figure(figsize=(14, 7))
 for i, col in enumerate(monthly_revenue_all.columns):
     plt.plot(all_dates[:len(monthly_revenue_all)], monthly_revenue_all[col], label=f'{col} 实际')
-    plt.plot(all_dates[len(monthly_revenue_all):], future_revenue_forecast[:, i], '--', label=f'{col} 预测')
+    plt.plot(all_dates[len(monthly_volume_all):], future_revenue_forecast[:, i], '--', label=f'{col} 预测')
 plt.title('月度销售额预测（元）')
 plt.xlabel('月份')
 plt.ylabel('销售额（元）')
@@ -217,3 +258,11 @@ growth_rate_volume = (this_year_total_volume - last_year_total_volume) / last_ye
 
 print("\n销量增长率预测：")
 print(growth_rate_volume)
+
+# 分析前15位客人的常用配送方式
+top_15_customers_delivery = data_2023[data_2023['khmc'].isin(top_15_customers['khmc'])]
+
+customer_delivery_stats = top_15_customers_delivery[top_15_customers_delivery['ywlx_code'].str.contains('配送|自提', na=False)].groupby(['khmc', 'ywlx_code']).agg({'fhdw': 'sum', 'hk': 'sum', 'fhjl_id': 'count'}).rename(columns={'fhjl_id': 'order_count'}).reset_index()
+
+print("前15位客户的常用配送方式：")
+print(customer_delivery_stats)
