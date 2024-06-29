@@ -145,6 +145,10 @@ model_revenue.fit(X_train, y_revenue_train)
 volume_forecast = model_volume.predict(X_test)
 revenue_forecast = model_revenue.predict(X_test)
 
+# 确保预测值不为负
+volume_forecast = np.maximum(volume_forecast, 0)
+revenue_forecast = np.maximum(revenue_forecast, 0)
+
 # 评估模型
 volume_mse = mean_squared_error(y_volume_test, volume_forecast)
 volume_r2 = r2_score(y_volume_test, volume_forecast)
@@ -160,6 +164,10 @@ future_X = np.array((future_dates - monthly_volume_all.index[0]).days).reshape(-
 
 future_volume_forecast = model_volume.predict(future_X)
 future_revenue_forecast = model_revenue.predict(future_X)
+
+# 确保未来预测值不为负
+future_volume_forecast = np.maximum(future_volume_forecast, 0)
+future_revenue_forecast = np.maximum(future_revenue_forecast, 0)
 
 # 合并实际和预测数据
 all_dates = monthly_volume_all.index.append(future_dates)
