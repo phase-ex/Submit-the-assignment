@@ -132,7 +132,7 @@ plt.ylabel('')
 plt.show()
 
 # 销售经理总销量（吨）和总销售额（元）
-sales_manager_stats = data_2023.groupby('sales_name').agg({'fhdw': 'sum', 'hk': 'sum', 'fhjl_id': 'count'}).rename(columns={'fhjl_id': 'order_count'}).reset_index()
+sales_manager_stats = data_2023.groupby('nick_name').agg({'fhdw': 'sum', 'hk': 'sum', 'fhjl_id': 'count'}).rename(columns={'fhjl_id': 'order_count'}).reset_index()
 
 # 计算销售经理贡献度
 total_revenue_sum = sales_manager_stats['hk'].sum()
@@ -147,13 +147,13 @@ sales_manager_stats = sales_manager_stats[sales_manager_stats['hk'] > 0]
 
 # 绘制销售经理销量和销售额的饼状图
 plt.figure(figsize=(10, 7))
-sales_manager_stats.set_index('sales_name')['fhdw'].plot.pie(autopct='%1.1f%%', startangle=90)
+sales_manager_stats.set_index('nick_name')['fhdw'].plot.pie(autopct='%1.1f%%', startangle=90)
 plt.title('2023年销售经理销量（吨）')
 plt.ylabel('')
 plt.show()
 
 plt.figure(figsize=(10, 7))
-sales_manager_stats.set_index('sales_name')['hk'].plot.pie(autopct='%1.1f%%', startangle=90)
+sales_manager_stats.set_index('nick_name')['hk'].plot.pie(autopct='%1.1f%%', startangle=90)
 plt.title('2023年销售经理销售额（元）')
 plt.ylabel('')
 plt.show()
